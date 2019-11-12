@@ -1,8 +1,9 @@
-package com.swy.spring;
+package com.swy.spring.parser;
 
 
 import com.swy.framework.ServiceConsumer;
 import com.swy.register.ZookeeperRegisterCenter;
+import com.swy.spring.ProxyFactoryBean;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -12,15 +13,16 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
 
-import java.util.ArrayList;
-import java.util.List;
 
-
-public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
+/**
+ * 1.将消费者注册到注册中心
+ * 2.构建bean
+ */
+public class ConsumerBeanDefinitionParser implements BeanDefinitionParser {
 
     private final Class<?> beanClass;
 
-    public ServiceBeanDefinitionParser(Class<?> beanClass) {
+    public ConsumerBeanDefinitionParser(Class<?> beanClass) {
         this.beanClass = beanClass;
     }
 
@@ -29,8 +31,6 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
-
-
 
         String interfaces = element.getAttribute("interfaces");
         String ref = element.getAttribute("ref");
@@ -45,7 +45,7 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 
         definition.getConstructorArgumentValues().addGenericArgumentValue(clazz);
 
-        definition.setBeanClass(ProxyFactory.class);
+        definition.setBeanClass(ProxyFactoryBean.class);
         definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
 
         BeanDefinitionRegistry beanDefinitionRegistry = parserContext.getRegistry();
@@ -56,12 +56,11 @@ public class ServiceBeanDefinitionParser implements BeanDefinitionParser {
 
         //将消费者信息注册到注册中心
         ServiceConsumer invoker = new ServiceConsumer();
-        List<ServiceConsumer> consumers = new ArrayList<>();
-        consumers.add(invoker);
+
         invoker.setConsumer(clazz);
         invoker.setServiceObject(interfaces);
         invoker.setGroupName("");
-        registerCenter4Consumer.registerConsumer(consumers);
+        registerCenter4Consumer.registerConsumer(invoker);
 
         return definition;
     }

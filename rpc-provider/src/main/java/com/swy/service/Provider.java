@@ -1,15 +1,9 @@
-package com.swy.provider;
+package com.swy.service;
 
 
 import com.swy.framework.Configuration;
-import com.swy.protocol.Procotol;
-import com.swy.protocol.dubbo.DubboProcotol;
-import com.swy.register.Register;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
-import com.swy.framework.URL;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.net.UnknownHostException;
@@ -24,7 +18,7 @@ public class Provider{
 	public static void main(String[] args) throws UnknownHostException {
 
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("rpc.xml");
-		System.out.println(Configuration.getInstance().getAddress());
+		System.out.println("-----------------------------");
 	}
 
 

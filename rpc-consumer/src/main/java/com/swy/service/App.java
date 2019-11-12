@@ -1,4 +1,4 @@
-package com.swy.provider;
+package com.swy.service;
 
 
 import org.springframework.context.ApplicationContext;
@@ -14,7 +14,9 @@ public class App
     {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("rpc.xml");
         HelloService service = (HelloService) applicationContext.getBean(HelloService.class);
+        UserService userService = (UserService) applicationContext.getBean(UserService.class);
         int res = service.cal(2,2);
-        System.out.println("name: " + res);
+        userService.add("swy");
+        System.out.println("HelloService调用结果: " + res);
     }
 }

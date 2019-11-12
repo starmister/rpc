@@ -9,7 +9,7 @@
 
     <rpc:application name="rpc-server" />
 
-    <rpc:provider interf="com.swy.provider.HelloService" impl="com.swy.provider.HelloServiceImpl" />
+    <rpc:provider interf="com.swy.service.HelloService" impl="com.swy.service.HelloServiceImpl" />
 
-    <rpc:provider interf="com.swy.provider.UserService" impl="com.swy.provider.UserServiceImpl" />
+    <rpc:provider interf="com.swy.service.UserService" impl="com.swy.service.UserServiceImpl" />
 </beans>

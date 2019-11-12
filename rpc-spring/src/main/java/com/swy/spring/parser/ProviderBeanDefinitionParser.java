@@ -1,4 +1,4 @@
-package com.swy.spring;
+package com.swy.spring.parser;
 
 
 import com.swy.framework.Configuration;
@@ -16,6 +16,13 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 当xml文件中<rpc:provider interf="com.swy.service.HelloService" impl="com.swy.service.HelloServiceImpl" />
+ * 启动该组件
+ * 主要任务就是把服务注册到zookeeper
+ * @author WeiYi
+ *
+ */
 public class ProviderBeanDefinitionParser implements BeanDefinitionParser {
 
     private final Class<?> beanClass;
@@ -29,7 +36,6 @@ public class ProviderBeanDefinitionParser implements BeanDefinitionParser {
 
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
-        System.out.println("15");
         String interfaces = element.getAttribute("interf");
         String impl = element.getAttribute("impl");
 
@@ -41,7 +47,7 @@ public class ProviderBeanDefinitionParser implements BeanDefinitionParser {
             if(port == 0) {
                 port = 32115;
             }
-            List<ServiceProvider> providerList = new ArrayList<>();
+
             ServiceProvider providerService = new ServiceProvider();
             providerService.setProvider(Class.forName(interfaces));
             providerService.setServiceObject(impl);
@@ -51,11 +57,11 @@ public class ProviderBeanDefinitionParser implements BeanDefinitionParser {
             providerService.setServiceMethod(null);
             providerService.setApplicationName("");
             providerService.setGroupName("nettyrpc");
-            providerList.add(providerService);
+
 
             //注册到zk,元数据注册中心
             RegisterCenter4Provider registerCenter4Provider = ZookeeperRegisterCenter.getInstance();
-            registerCenter4Provider.registerProvider(providerList);
+            registerCenter4Provider.registerProvider(providerService);
 
         } catch (UnknownHostException e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.swy.provider;
+package com.swy.service;
 
 public class UserServiceImpl implements UserService {
 

@@ -46,16 +46,11 @@ public class NettyChannelPoolFactory {
 	private List<ServiceProvider> serviceMetaDataList = new ArrayList<>();
 	
 	//根据配置文件里面需要调用的接口信息来初始化 channel
-	public void initNettyChannelPoolFactory(Map<String, List<ServiceProvider>> providerMap){
+	public void initNettyChannelPoolFactory(Map<String, ServiceProvider> providerMap){
 
 		//将服务提供者信息存入serviceMetaDataList列表
-		Collection<List<ServiceProvider>> collectionServiceMetaDataList = providerMap.values();
-		for (List<ServiceProvider> serviceMetaDataModels : collectionServiceMetaDataList) {
-			if (CollectionUtils.isEmpty(serviceMetaDataModels)) {
-				continue;
-			}
-			serviceMetaDataList.addAll(serviceMetaDataModels);
-		}
+		Collection<ServiceProvider> collectionServiceMetaDataList = providerMap.values();
+		serviceMetaDataList.addAll(collectionServiceMetaDataList);
 
 		//获取服务提供者地址列表
 		Set<URL> set = new HashSet<>();
@@ -150,7 +145,6 @@ public class NettyChannelPoolFactory {
 	}
 	//根据 url 获取阻塞队列
 	public ArrayBlockingQueue<Channel> acqiure(URL url){
-		System.out.println(channelPoolMap.toString());
 		return channelPoolMap.get(url);
 	}
 	

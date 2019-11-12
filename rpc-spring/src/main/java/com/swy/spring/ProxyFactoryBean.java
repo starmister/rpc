@@ -5,7 +5,7 @@ import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.Proxy;
 
-public class ProxyFactory<T> implements FactoryBean<T> {
+public class ProxyFactoryBean<T> implements FactoryBean<T> {
 
 
     private Class<T> interfaceClass;
@@ -13,7 +13,7 @@ public class ProxyFactory<T> implements FactoryBean<T> {
 
 
 
-    public ProxyFactory(Class<T> interfaceClass) {
+    public ProxyFactoryBean(Class<T> interfaceClass) {
         this.interfaceClass = interfaceClass;
     }
 
@@ -21,7 +21,7 @@ public class ProxyFactory<T> implements FactoryBean<T> {
 
     @Override
     public T getObject() throws Exception {
-        return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[]{interfaceClass}, new Handler(interfaceClass));
+        return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[]{interfaceClass}, new RequestHandler(interfaceClass));
     }
 
     @Override

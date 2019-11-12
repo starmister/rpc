@@ -15,15 +15,14 @@ import com.swy.register.ZookeeperRegisterCenter;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.UUID;
 
 
-public class Handler<T> implements InvocationHandler{
+public class RequestHandler<T> implements InvocationHandler{
 
     private Class<T> interfaceClass;
 
-    public Handler(Class<T> interfaceClass) {
+    public RequestHandler(Class<T> interfaceClass) {
         this.interfaceClass = interfaceClass;
     }
 
@@ -47,17 +46,10 @@ public class Handler<T> implements InvocationHandler{
         String serviceKey = interfaceClass.getName();
         //获取某个接口的服务提供者列表
         RegisterCenter4Consumer registerCenter4Consumer = ZookeeperRegisterCenter.getInstance();
-        List<ServiceProvider> providerServices = registerCenter4Consumer.getServiceMetaDataMap4Consumer().get(serviceKey);
-        //根据软负载策略,从服务提供者列表选取本次调用的服务提供者
-        String stragety = configuration.getStragety();
-        if(null == stragety || stragety == ""){
-            stragety = "random";
-        }
-        System.out.println("swy:"+ providerServices.get(0).toString());
-        LoadStrategy loadStrategyService = LoadBalanceEngine.queryLoadStrategy(stragety);
-        ServiceProvider serviceProvider = loadStrategyService.select(providerServices);
-        URL url = new URL(serviceProvider.getIp(),serviceProvider.getPort());
-        String impl = serviceProvider.getServiceObject().toString();
+        ServiceProvider providerService = registerCenter4Consumer.getServiceMetaDataMap4Consumer().get(serviceKey);
+
+        URL url = new URL(providerService.getIp(),providerService.getPort());
+        String impl = providerService.getServiceObject().toString();
         int timeout = 20000;
         RpcRequest invocation = new RpcRequest(UUID.randomUUID().toString(),interfaceClass.getName(),method.getName(),args, method.getParameterTypes(),impl,timeout);
         Object res = procotol.send(url, invocation);

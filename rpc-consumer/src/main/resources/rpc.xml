@@ -10,6 +10,8 @@
 
     <rpc:application name="rpc-client" />
 
-    <rpc:service interfaces="com.swy.provider.HelloService" ref="helloService" timeout="5000"/>
+    <rpc:consumer interfaces="com.swy.service.HelloService" ref="helloService" timeout="5000"/>
+
+    <rpc:consumer interfaces="com.swy.service.UserService" ref="userService" timeout="5000"/>
 
 </beans>

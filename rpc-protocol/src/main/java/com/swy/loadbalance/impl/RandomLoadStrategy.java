@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class RandomLoadStrategy implements LoadStrategy {
 
+    @Override
     public ServiceProvider select(List<ServiceProvider> providers) {
         int m = providers.size();
         Random r = new Random();

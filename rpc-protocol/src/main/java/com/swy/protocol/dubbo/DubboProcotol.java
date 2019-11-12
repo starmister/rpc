@@ -29,6 +29,7 @@ public class DubboProcotol implements Procotol {
         Channel channel = null;
         try {
             channel = queue.poll(invocation.getTimeout(), TimeUnit.MILLISECONDS);
+
             if(channel == null || !channel.isActive() || !channel.isOpen()|| !channel.isWritable()){
                 channel = queue.poll(invocation.getTimeout(), TimeUnit.MILLISECONDS);
                 if(channel == null){

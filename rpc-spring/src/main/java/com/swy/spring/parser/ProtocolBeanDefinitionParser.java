@@ -1,4 +1,4 @@
-package com.swy.spring;
+package com.swy.spring.parser;
 
 
 import com.swy.framework.Configuration;
@@ -18,11 +18,18 @@ import java.net.InetAddress;
 import java.util.List;
 import java.util.Map;
 
-public class ProcotolBeanDefinitionParser implements BeanDefinitionParser {
+/**
+ * 当xml文件中<rpc:procotol procotol="Dubbo" port="3230" serialize="ProtoStuff" role="provider" address="118.190.36.109:2181"/>
+ * 启动该组件
+ * 这里使用dubbo 所以我们要启动netty
+ * @author WeiYi
+ *
+ */
+public class ProtocolBeanDefinitionParser implements BeanDefinitionParser {
 
     private final Class<?> beanClass;
 
-    public ProcotolBeanDefinitionParser(Class<?> beanClass) {
+    public ProtocolBeanDefinitionParser(Class<?> beanClass) {
         this.beanClass = beanClass;
     }
 
@@ -31,7 +38,6 @@ public class ProcotolBeanDefinitionParser implements BeanDefinitionParser {
 
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
-        System.out.println("1");
         String pro = element.getAttribute("procotol");
         int port = Integer.parseInt(element.getAttribute("port"));
         Configuration.getInstance().setProcotol(pro);
@@ -70,7 +76,7 @@ public class ProcotolBeanDefinitionParser implements BeanDefinitionParser {
             //初始化服务提供者列表到本地缓存
             registerCenter4Consumer.initProviderMap();
             //初始化Netty Channel
-            Map<String, List<ServiceProvider>> providerMap = registerCenter4Consumer.getServiceMetaDataMap4Consumer();
+            Map<String, ServiceProvider> providerMap = registerCenter4Consumer.getServiceMetaDataMap4Consumer();
             if (MapUtils.isEmpty(providerMap)) {
                 throw new RuntimeException("service provider list is empty.");
             }
