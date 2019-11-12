@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rpc="http://swy.com/schema" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://swy.com/schema http://swy.com/schema/rpc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <rpc:procotol procotol="Dubbo" port="3230" serialize="ProtoStuff" role="provider" address="118.190.36.109:2181"/>
+
+    <rpc:application name="rpc-server" />
+
+    <rpc:provider interf="com.swy.provider.HelloService" impl="com.swy.provider.HelloServiceImpl" />
+
+    <rpc:provider interf="com.swy.provider.UserService" impl="com.swy.provider.UserServiceImpl" />
+</beans>
